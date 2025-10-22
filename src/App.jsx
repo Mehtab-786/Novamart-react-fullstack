@@ -1,7 +1,15 @@
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import { Outlet } from "react-router";
+
 function App() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Navbar />
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   );
 }
