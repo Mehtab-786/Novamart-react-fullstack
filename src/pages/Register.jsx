@@ -1,8 +1,20 @@
 import  { useState } from 'react'
 import { Eye, EyeOff, User, Mail, Lock, Phone } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { registerUser } from '../services/API'
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false)
+
+  const {register, handleSubmit, formState:{errors}, reset, watch}  = useForm()
+
+  // console.log(watch("example")) // watch input value by passing the name of it
+
+  const registerHandler = (data) => {
+    console.log(data)
+    registerUser(data)  
+  }
+  
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
@@ -14,7 +26,7 @@ function Register() {
         </div>
 
         {/* Form */}
-        <div className="space-y-4">
+        <form className="space-y-4"  onSubmit={handleSubmit(registerHandler)}>
           {/* Username Field */}
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
@@ -24,6 +36,19 @@ function Register() {
               type="text"
               placeholder="Username"
               className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              {...register("username", { required: true})}
+            />
+          </div>
+          {/* name Field */}
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+              <User size={20} />
+            </div>
+            <input
+              type="text"
+              placeholder="Fullname"
+              className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              {...register("name", { required: true})}
             />
           </div>
 
@@ -36,6 +61,7 @@ function Register() {
               type="tel"
               placeholder="Email"
               className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              {...register("email", { required: true})}
             />
           </div>
 
@@ -48,6 +74,7 @@ function Register() {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••••••"
               className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              {...register("password", { required: true})}
             />
             <button
               type="button"
@@ -66,7 +93,7 @@ function Register() {
           >
             Sign Up
           </button>
-        </div>
+        </form>
 
         {/* Sign In Link */}
         <div className="mt-6 text-center">

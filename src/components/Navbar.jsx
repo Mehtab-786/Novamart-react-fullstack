@@ -10,8 +10,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Left side - Brand name */}
           <div className="flex-shrink-0">
-            <NavLink 
-              to="/" 
+            <NavLink
+              to="/"
               className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -21,14 +21,14 @@ export default function Navbar() {
 
           {/* Right side - Desktop Navigation links */}
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink 
-              to="/" 
+            <NavLink
+              to="/"
               end
               className={({ isActive }) =>
                 `text-base font-medium transition-colors duration-200 relative ${
-                  isActive 
-                    ? 'text-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600'
+                  isActive
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
                 }`
               }
             >
@@ -41,15 +41,15 @@ export default function Navbar() {
                 </>
               )}
             </NavLink>
-            
-            <NavLink 
-              to="/products" 
+
+            <NavLink
+              to="/products"
               end
               className={({ isActive }) =>
                 `text-base font-medium transition-colors duration-200 relative ${
-                  isActive 
-                    ? 'text-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600'
+                  isActive
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
                 }`
               }
             >
@@ -62,20 +62,41 @@ export default function Navbar() {
                 </>
               )}
             </NavLink>
-            
-            <NavLink 
+
+            <NavLink
               to="/cart"
               className={({ isActive }) =>
                 `text-base font-medium transition-colors duration-200 relative ${
-                  isActive 
-                    ? 'text-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600'
+                  isActive
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   Cart
+                  {isActive && (
+                    <span className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-blue-600"></span>
+                  )}
+                </>
+              )}
+            </NavLink>
+
+            <NavLink
+              to="/register"
+              end
+              className={({ isActive }) =>
+                `text-base font-medium transition-colors duration-200 relative ${
+                  isActive
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  Register
                   {isActive && (
                     <span className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-blue-600"></span>
                   )}
@@ -112,8 +133,8 @@ export default function Navbar() {
         <div
           className={`md:hidden transition-all duration-300 ease-in-out ${
             isMenuOpen
-              ? 'max-h-64 opacity-100'
-              : 'max-h-0 opacity-0 overflow-hidden'
+              ? "max-h-64 opacity-100"
+              : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
           <div className="py-4 space-y-3">
@@ -123,8 +144,8 @@ export default function Navbar() {
               className={({ isActive }) =>
                 `block px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                 }`
               }
               onClick={() => setIsMenuOpen(false)}
@@ -138,8 +159,8 @@ export default function Navbar() {
               className={({ isActive }) =>
                 `block px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                 }`
               }
               onClick={() => setIsMenuOpen(false)}
@@ -152,8 +173,8 @@ export default function Navbar() {
               className={({ isActive }) =>
                 `block px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                 }`
               }
               onClick={() => setIsMenuOpen(false)}
