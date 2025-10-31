@@ -5,6 +5,7 @@ import ProductsPage from "../pages/ProductsPage";
 import ProductDetail from "../pages/ProductDetail";
 import Cart from "../pages/Cart";
 import Register from "../pages/Register";
+import Login from '../pages/Login'
 
 // Define an array of route objects
 const router = createBrowserRouter([
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { path: "/products/:productId", Component: ProductDetail },
       { path: "/cart", Component: Cart },
       { path: "/register", Component: Register },
+      { path: "/login", Component: Login },
     ],
   },
 ]);

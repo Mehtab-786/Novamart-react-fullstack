@@ -1,18 +1,19 @@
 import  { useState } from 'react'
 import { Eye, EyeOff, User, Mail, Lock, Phone } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { registerUser } from '../services/API'
+import {useUser} from '../context/UserContext'
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false)
 
-  const {register, handleSubmit, formState:{errors}, reset, watch}  = useForm()
+  const {register, handleSubmit, formState:{errors}, reset, watch}  = useForm();
+
+   const {user, isAuthenticated, userRegister} =useUser();
 
   // console.log(watch("example")) // watch input value by passing the name of it
 
   const registerHandler = (data) => {
-    console.log(data)
-    registerUser(data)  
+    userRegister(data)
   }
   
 

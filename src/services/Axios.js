@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_API_URL,
-  timeout: 8000,
   headers: {
     "Content-Type": 'application/json'
   }
@@ -10,17 +9,20 @@ const instance = axios.create({
 
 //Request intercepters
 instance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 }, (err) => Promise.reject(err))
 
 //Response intercepters
 instance.interceptors.response.use((res) => res, async (err) => {
   const { response } = err;
+
   if (response?.status === 401) {
-    // Optionally trigger refresh or logout flow
+    return Promise.reject({ code: "TOKEN_EXPIRED", originalError: err });
+    // throw { code: 'TOKEN_EXPIRED', message: "Access token missing or expired" };
   }
+
   return Promise.reject(err);
 });
 
