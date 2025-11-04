@@ -1,12 +1,22 @@
-import { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
+import { useState } from 'react';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import {useUser} from '../context/UserContext';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
 
+  const {register , handleSubmit} = useForm();
+
+  const {userLogin, user, isAuthenticated} = useUser();
+
+  const loginHandler = (data) => {
+    userLogin(data)
+  }
+
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-lg p-8">
+      <form className="w-full max-w-md bg-white rounded-3xl shadow-lg p-8" onSubmit={handleSubmit(loginHandler)}>
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-800 mb-1">Login</h1>
@@ -24,6 +34,7 @@ function Login() {
               type="email"
               placeholder="Email"
               className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              {...register("email", { required: true})}
             />
           </div>
 
@@ -36,6 +47,7 @@ function Login() {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••••••"
               className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              {...register("password", { required: true})}
             />
             <button
               type="button"
@@ -65,7 +77,7 @@ function Login() {
             </button>
           </p>
         </div>
-      </div>
+      </form>
     </div>
   )
 }

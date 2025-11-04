@@ -84,6 +84,27 @@ export default function Navbar() {
             </NavLink>
 
             <NavLink
+              to="/login"
+              end
+              className={({ isActive }) =>
+                `text-base font-medium transition-colors duration-200 relative ${
+                  isActive
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  Login
+                  {isActive && (
+                    <span className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-blue-600"></span>
+                  )}
+                </>
+              )}
+            </NavLink>
+
+            <NavLink
               to="/register"
               end
               className={({ isActive }) =>

@@ -1,18 +1,16 @@
 // src/api/userApi.js
-import axios from "axios";
 import instance from "./Axios";
 
 export async function registerUser(data) {
   try {
     const response = await instance.post("/auth/register", data);
-    console.log(response.data)
+    console.log(response)
     return response.data; // ✅ Return only the useful data
   } catch (error) {
     console.error("Registration failed:", error);
     throw error.response?.data || error;
   }
 }
-
 
 export async function getCurrentUser() {
   try {
@@ -52,7 +50,7 @@ export async function refreshAccessToken() {
     const refreshToken = localStorage.getItem('refreshToken')
     console.log('refresh token ::, ', refreshToken)
 
-    const res = await axios.get(`${import.meta.env.VITE_BACKEND_API_URL}/auth/access-token`, {
+    const res = await instance.get(`${import.meta.env.VITE_BACKEND_API_URL}/auth/access-token`, {
       // withCredentials: true
     });
 
