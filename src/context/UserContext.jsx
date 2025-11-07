@@ -10,36 +10,35 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     try {
-  //       const data = await getCurrentUser();
-  //       setUser(data.user);
-  //       console.log(data.user);
-  //       setIsAuthenticated(true);
-  //     } catch (error) {
-  //       localStorage.removeItem("accessToken");
-  //       console.warn("User not logged in, redirecting...", error);
-  //       setIsAuthenticated(false);
-  //       navigate("/login"); // if user not logged in
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const data = await getCurrentUser();
+        setUser(data.user);
+        console.log(data.user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        localStorage.removeItem("accessToken");
+        console.warn("User not logged in, redirecting...", error);
+        setIsAuthenticated(false);
+        navigate("/login"); // if user not logged in
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   checkUser();
-  // }, [navigate]);
+    checkUser();
+  }, [navigate]);
 
   // ✅ Register new user
- 
- 
+
   const userRegister = async (formData) => {
     try {
       setLoading(true);
       const data = await registerUser(formData);
       setUser(data.user);
       setIsAuthenticated(true);
-      console.log(data)
+      console.log(data);
       navigate("/"); // redirect to home after successful register
     } catch (error) {
       console.error("Registration failed:", error);
@@ -53,7 +52,7 @@ export const UserProvider = ({ children }) => {
     try {
       setLoading(true);
       const data = await loginUser(userData);
-      console.log(data)
+      console.log(data);
       setUser(data.user);
       setIsAuthenticated(true);
       navigate("/"); // redirect to home after successful login
