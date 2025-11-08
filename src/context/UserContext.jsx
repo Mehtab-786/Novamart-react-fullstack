@@ -5,7 +5,6 @@ import {
   loginUser,
   registerUser,
   logoutClientSide,
-  refreshAccessToken,
 } from "../services/API";
 
 const UserContext = createContext();
@@ -16,34 +15,34 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const res = await getCurrentUser(); // axiosInstance will attach access token & auto-refresh on 401
-  //       if (res?.user) {
-  //         setUser(res.user);
-  //         setIsAuthenticated(true);
-  //       } else {
-  //         throw new Error("No user returned");
-  //       }
-  //     } catch (error) {
-  //       // failed to get current user -> probably not authenticated
-  //       console.warn("User not logged in or failed to fetch user:", error);
-  //       logoutClientSide();
-  //       setUser(null);
-  //       setIsAuthenticated(false);
-  //       navigate("/login");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        setLoading(true);
+        const res = await getCurrentUser();
+        if (res?.data) {
+          setUser(res?.data);
+          setIsAuthenticated(true);
+        } else {
+          throw new Error("No user returned");
+        }
+      } catch (error) {
+        // failed to get current user -> probably not authenticated
+        console.warn("User not logged in or failed to fetch user:", error);
+        logoutClientSide();
+        setUser(null);
+        setIsAuthenticated(false);
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   checkUser();
-  //   // we do not add navigate to deps to avoid re-running; it's okay
-  //   // If you want to re-check on route change you can add additional logic
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    checkUser();
+    // we do not add navigate to deps to avoid re-running; it's okay
+    // If you want to re-check on route change you can add additional logic
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ✅ Register new user
   const userRegister = async (formData) => {
@@ -85,9 +84,7 @@ export const UserProvider = ({ children }) => {
 
   // Logout
   const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    navigate("/login");
+
   };
 
   return (
@@ -98,7 +95,7 @@ export const UserProvider = ({ children }) => {
         userLogin,
         userRegister,
         logout,
-        forceRefresh, }}
+       }}
     >
       {children}
     </UserContext.Provider>
