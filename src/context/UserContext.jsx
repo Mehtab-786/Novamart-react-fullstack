@@ -1,6 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { getCurrentUser, loginUser, registerUser } from "../services/API";
+import {
+  getCurrentUser,
+  loginUser,
+  registerUser,
+  logoutClientSide,
+  refreshAccessToken,
+} from "../services/API";
 
 const UserContext = createContext();
 
@@ -10,68 +16,89 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const data = await getCurrentUser();
-        setUser(data.user);
-        console.log(data.user);
-        setIsAuthenticated(true);
-      } catch (error) {
-        localStorage.removeItem("accessToken");
-        console.warn("User not logged in, redirecting...", error);
-        setIsAuthenticated(false);
-        navigate("/login"); // if user not logged in
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const checkUser = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const res = await getCurrentUser(); // axiosInstance will attach access token & auto-refresh on 401
+  //       if (res?.user) {
+  //         setUser(res.user);
+  //         setIsAuthenticated(true);
+  //       } else {
+  //         throw new Error("No user returned");
+  //       }
+  //     } catch (error) {
+  //       // failed to get current user -> probably not authenticated
+  //       console.warn("User not logged in or failed to fetch user:", error);
+  //       logoutClientSide();
+  //       setUser(null);
+  //       setIsAuthenticated(false);
+  //       navigate("/login");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    checkUser();
-  }, [navigate]);
+  //   checkUser();
+  //   // we do not add navigate to deps to avoid re-running; it's okay
+  //   // If you want to re-check on route change you can add additional logic
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // ✅ Register new user
-
   const userRegister = async (formData) => {
     try {
       setLoading(true);
       const data = await registerUser(formData);
-      setUser(data.user);
-      setIsAuthenticated(true);
-      console.log(data);
-      navigate("/"); // redirect to home after successful register
+      if (data?.user) {
+        setUser(data.user);
+        setIsAuthenticated(true);
+        navigate("/");
+      }
+      return data;
     } catch (error) {
       console.error("Registration failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
   // Example login function
-  const userLogin = async (userData) => {
+   const userLogin = async (userData) => {
     try {
       setLoading(true);
       const data = await loginUser(userData);
-      console.log(data);
-      setUser(data.user);
-      setIsAuthenticated(true);
-      navigate("/"); // redirect to home after successful login
+      if (data?.user) {
+        setUser(data.user);
+        setIsAuthenticated(true);
+        navigate("/");
+      }
+      return data;
     } catch (error) {
-      console.error("Login failed :", error);
+      console.error("Login failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  // Example logout function
+  // Logout
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
+    navigate("/login");
   };
 
   return (
     <UserContext.Provider
-      value={{ user, isAuthenticated, userLogin, logout, userRegister }}
+      value={{ user,
+        isAuthenticated,
+        loading,
+        userLogin,
+        userRegister,
+        logout,
+        forceRefresh, }}
     >
       {children}
     </UserContext.Provider>
