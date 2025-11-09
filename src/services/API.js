@@ -16,62 +16,33 @@ export async function registerUser(data) {
   }
 }
 
-/**
- * getCurrentUser - tries to fetch /auth/getme
- * - If access token missing -> attempts refresh once.
- * - If request returns 401 -> attempts refresh once and retries the call.
- * - If refresh not possible / fails -> throws so caller can logout and redirect.
- */
+
 export async function getCurrentUser() {
   try {
     let accessToken = Cookies.get("accessToken");
+    let refreshToken = Cookies.get("refreshToken");
+    console.log("accessToken --> ", accessToken);
+    console.log("refresh token --> ", refreshToken);
 
     // If there is no access token, try to refresh it first
     if (!accessToken) {
-      accessToken = await refreshAccessToken(); // may throw NO_REFRESH_TOKEN
+      accessToken = await refreshAccessToken(); // may throw 
+      // NO_REFRESH_TOKEN
+      console.log(accessToken)
     }
 
     // try getting the user
     const resp = await axios.get("https://testdog.in/api/v1/auth/getme", {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
-    console.log(accessToken)
     console.log(resp)
     return resp.data;
   } catch (error) {
-    // If the error is an axios response with 401, try refreshing once then retry
-    const status = error?.response?.status;
-
-    if (status === 401) {
-      try {
-        const newAccessToken = await refreshAccessToken(); // may throw NO_REFRESH_TOKEN or others
-
-        // retry original request with the new token
-        const retryResp = await axios.get(
-          "https://testdog.in/api/v1/auth/getme",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          }
-        );
-        console.log(status)
-        console.log(newAccessToken);
-        console.log(newAccessToken)
-        console.log(retryResp);
-        return retryResp.data;
-      } catch (refreshErr) {
-        // refresh failed -> bubble up (caller will logout & navigate to login)
-        console.log('error --> ', refreshErr)
-        throw refreshErr;
-      }
-    }
-
     // If error was NO_REFRESH_TOKEN or something else, rethrow for the caller
+    console.log('error -- no token found , ', error)
     throw error;
   }
 }
@@ -122,27 +93,25 @@ export async function refreshAccessToken() {
   try {
     const resp = await axios.get(
       'https://testdog.in/api/v1/auth/access-token',
-      { refreshToken },
-      { headers: { "Content-Type": "application/json" } }
-    )
+      { headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${refreshToken}` } },
+      )
     console.log(resp);
 
-    // Many APIs return payload in resp.data; ensure you destructure correctly:
-    // Example expected shape: { accessToken: "...", refreshToken: "..." }
+    
     const { accessToken, refreshToken: newRefreshToken } = resp.data;
-
+    console.log('accessToken, newRefreshToken, refreshToken --> , ', accessToken, newRefreshToken, refreshToken)
     if (!accessToken) {
       throw new Error("REFRESH_FAILED_NO_ACCESS_TOKEN");
     }
-    
+
     // keep tokens in sync in cookies / local state
     // If backend returns a new refresh token use it, otherwise reuse existing
     setToken({
       accessToken,
       refreshToken: newRefreshToken || refreshToken,
     });
-    
-    console.log(accessToken, refreshToken)
+
+    console.log('accessToken, refreshToken ', accessToken, refreshToken)
     return resp;
   } catch (error) {
     // bubble up so caller can logout / redirect
@@ -150,6 +119,5 @@ export async function refreshAccessToken() {
     console.log('error in creating new aces token', error)
     throw error;
   }
-
 
 }

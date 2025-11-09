@@ -20,6 +20,7 @@ export const UserProvider = ({ children }) => {
       try {
         setLoading(true);
         const res = await getCurrentUser();
+        console.log(res)
         if (res?.data) {
           setUser(res?.data);
           setIsAuthenticated(true);
