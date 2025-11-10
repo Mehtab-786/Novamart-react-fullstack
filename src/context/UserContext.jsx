@@ -38,11 +38,7 @@ export const UserProvider = ({ children }) => {
         setLoading(false);
       }
     };
-
     checkUser();
-    // we do not add navigate to deps to avoid re-running; it's okay
-    // If you want to re-check on route change you can add additional logic
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ✅ Register new user
