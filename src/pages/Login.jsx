@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock,User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import {useUser} from '../context/UserContext';
 
@@ -11,6 +11,7 @@ function Login() {
   const {userLogin, user, isAuthenticated} = useUser();
 
   const loginHandler = (data) => {
+    // console.log(data)
     userLogin(data)
   }
 
@@ -25,16 +26,16 @@ function Login() {
 
         {/* Form */}
         <div className="space-y-4">
-          {/* Email Field */}
+          {/* username Field */}
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-              <Mail size={20} />
+              <User size={20} />
             </div>
             <input
-              type="email"
-              placeholder="Email"
+              type="username"
+              placeholder="username"
               className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
-              {...register("email", { required: true})}
+              {...register("username", { required: true})}
             />
           </div>
 

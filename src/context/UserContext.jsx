@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
 import {
   getCurrentUser,
@@ -21,12 +22,13 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         const res = await getCurrentUser();
         console.log(res)
-        if (res?.data) {
-          setUser(res?.data);
-          setIsAuthenticated(true);
-        } else {
-          throw new Error("No user returned");
-        }
+        return res
+        // if (res?.data) {
+        //   setUser(res?.data);
+        //   setIsAuthenticated(true);
+        // } else {
+        //   throw new Error("No user returned");
+        // }
       } catch (error) {
         // failed to get current user -> probably not authenticated
         console.warn("User not logged in or failed to fetch user:", error);
@@ -45,10 +47,11 @@ export const UserProvider = ({ children }) => {
   const userRegister = async (formData) => {
     try {
       setLoading(true);
-      const data = await registerUser(formData);
-      if (data?.user) {
-        setUser(data.user);
+      const {data} = await registerUser(formData);
+      if (data.data.user) {
+        setUser(data.data.user);
         setIsAuthenticated(true);
+        alert(data.message)
         navigate("/");
       }
       return data;
@@ -64,8 +67,10 @@ export const UserProvider = ({ children }) => {
    const userLogin = async (userData) => {
     try {
       setLoading(true);
-      const data = await loginUser(userData);
+      const {data} = await loginUser(userData);
       if (data?.user) {
+        await Cookies.set("refreshToken",data.refreshToken)
+        await Cookies.set("accessToken",data.accessToken)
         setUser(data.user);
         setIsAuthenticated(true);
         navigate("/");

@@ -40,18 +40,6 @@ function Register() {
               {...register("username", { required: true})}
             />
           </div>
-          {/* name Field */}
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-              <User size={20} />
-            </div>
-            <input
-              type="text"
-              placeholder="Fullname"
-              className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-0 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
-              {...register("name", { required: true})}
-            />
-          </div>
 
           {/* Email Field */}
           <div className="relative">
