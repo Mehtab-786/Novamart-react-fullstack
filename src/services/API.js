@@ -18,7 +18,6 @@ export async function registerUser(data) {
 
     try {
         const response = await axios.request(options);
-        console.log("response ::", response);
         return response
     } catch (error) {
         console.error(error);
@@ -28,15 +27,17 @@ export async function registerUser(data) {
 
 export async function getCurrentUser() {
 
+    let accessToken = await Cookies.get('accessToken')
+    console.log(accessToken)
+
     const options = {
         method: 'GET',
         url: 'https://api.freeapi.app/api/v1/users/current-user',
-        headers: { accept: 'application/json' }
+        headers: { accept: 'application/json','content-type': 'application/json', Authorization: `Bearer ${accessToken}` }
     };
 
     try {
         const { data } = await axios.request(options);
-        console.log(data);
         return data
     } catch (error) {
         console.error(error);
