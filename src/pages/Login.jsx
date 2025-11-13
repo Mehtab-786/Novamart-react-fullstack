@@ -8,7 +8,7 @@ function Login() {
 
   const {register , handleSubmit} = useForm();
 
-  const {userLogin, user, isAuthenticated} = useUser();
+  const {userLogin} = useUser();
 
   const loginHandler = (data) => {
     // console.log(data)

@@ -27,20 +27,18 @@ export async function registerUser(data) {
 
 export async function getCurrentUser() {
 
-    let accessToken = await Cookies.get('accessToken')
-    console.log(accessToken)
-
     const options = {
         method: 'GET',
         url: 'https://api.freeapi.app/api/v1/users/current-user',
-        headers: { accept: 'application/json','content-type': 'application/json', Authorization: `Bearer ${accessToken}` }
+        headers: { accept: 'application/json', 'content-type': 'application/json'},
     };
 
     try {
         const { data } = await axios.request(options);
-        return data
+        return data;
     } catch (error) {
-        console.error(error);
+        console.log('error while getting current user ::', error);
+        throw error;
     }
 }
 
@@ -55,13 +53,30 @@ export async function loginUser(data) {
 
     try {
         const { data } = await axios.request(options);
-        // console.log(data);
         return data
     } catch (error) {
         console.error(error);
     }
 }
 
+export async function generateAccessToken() {
+    
+    const options = {
+        method: 'POST',
+        url: 'https://api.freeapi.app/api/v1/users/refresh-token',
+        headers: { accept: 'application/json', 'content-type': 'application/json'}
+
+        // data: { refreshToken } // send refreshToken in the body, not in headers!
+    };
+
+    try {
+        const { data } = await axios.request(options);
+        console.log(data);
+        return data
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 // Logout helper
 export function logoutClientSide() {
