@@ -1,10 +1,11 @@
-// src/api/axios.js
-import axios from 'axios';
+import instance from '../Utils/AxiosInstance';
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' }
-});
-
-
-export default api;
+export async function registerUser(data) {
+    try {
+        const userData = await instance.post('/auth/register', data);
+        console.log(userData);
+        return userData;
+    } catch (error) {
+        console.warn('Error while registering user', error);
+    };
+};
