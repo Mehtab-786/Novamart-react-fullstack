@@ -4,6 +4,7 @@ import Home from "../Pages/Home";
 import AuthLayout from "./AuthLayout";
 import Register from "../Pages/Register";
 import Products from "../Pages/Products";
+import Login from "../Pages/Login";
 
 function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ function AppRoutes() {
 
       <Route element={<AuthLayout />}>
             <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
       </Route>
 
        {/* Protected */}

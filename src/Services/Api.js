@@ -3,10 +3,9 @@ import instance from '../Utils/AxiosInstance';
 export async function registerUser(data) {
     try {
         const userData = await instance.post('/auth/register', data);
-        console.log(userData);
-        return userData;
+        return userData?.data;
     } catch (error) {
-        console.warn('Error while registering user', error);
+        throw { message: error?.response?.data?.message || "Registration failed", ...error?.response?.data };
     };
 };
 
@@ -14,10 +13,11 @@ export async function loginUser(data) {
     try {
         const userData = await instance.post('/auth/login', data);
         console.log(userData);
-        return userData;
+        return userData.data;
     } catch (error) {
-        console.warn('Error while logging user', error);
-    };
+        console.error("Login failed:", error);
+        throw { message: error?.response?.data?.message || "Login failed", ...error?.response?.data };
+    }
 };
 
 export async function currentUser() {
@@ -26,8 +26,9 @@ export async function currentUser() {
         console.log(userData);
         return userData;
     } catch (error) {
-        console.warn('Error while fetching current user', error);
-    };
+        console.log('Error while fetching current user', error);
+        throw { message: error?.response?.data?.message || "Fetch current user failed", ...error?.response?.data };
+    }
 };
 
 export async function logoutUser() {
@@ -36,8 +37,9 @@ export async function logoutUser() {
         console.log(userData);
         return userData;
     } catch (error) {
-        console.warn('Error while logging out user', error);
-    };
+        console.log('Error while logging out user', error);
+        throw { message: error?.response?.data?.message || "Logout failed", ...error?.response?.data };
+    }
 };
 
 export async function generateAccessToken() {
@@ -46,7 +48,7 @@ export async function generateAccessToken() {
         console.log(userData);
         return userData;
     } catch (error) {
-        console.warn('Error while generating new access token', error);
-    };
+        console.log('Error while generating new access token', error);
+        throw { message: error?.response?.data?.message || "Generate access token failed", ...error?.response?.data };
+    }
 };
-
